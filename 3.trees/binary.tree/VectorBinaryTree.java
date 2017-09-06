@@ -24,6 +24,7 @@ class Node<E> {
 public class VectorBinaryTree<T> {
 
   Vector<Node<T>> tree;
+  int count = 0;
 
   public VectorBinaryTree() {
     this.tree = new Vector<Node<T>>(50);
@@ -39,7 +40,12 @@ public class VectorBinaryTree<T> {
     Node<T> node = new Node<T>(key, data);
     node.pos = this.p(node);
 
+    // Add the node to the vector at the specific position.
     this.tree.set(node.pos, node);
+
+    // Increment the Node count.
+    this.count++;
+
     return node;
   }
 
@@ -100,11 +106,24 @@ public class VectorBinaryTree<T> {
 
 
   public Node leftChild(Node node) {
-    return this.tree.elementAt(2 * this.p(node));
+    int pos = 2 * this.p(node);
+    
+    // Validate the index is within bounds.
+    if(!this.validPosition(pos)) {
+      return null;
+    }
+    return this.tree.elementAt(pos);
   }
 
   public Node rightChild(Node node) {
-    return this.tree.elementAt(2 * this.p(node) + 1);
+    int pos = 2 * this.p(node) + 1;
+
+    // Validate the index is within bounds.
+    if(!this.validPosition(pos)) {
+      return null;
+    }
+    
+    return this.tree.elementAt(pos);
   }
 
   public boolean isRoot(Node node) {
@@ -119,5 +138,78 @@ public class VectorBinaryTree<T> {
     return this.isExternal(node) ? false : true;
   }
 
+  public int countLeves() {
+    return this.countLeves(this.root());
+  }
+  public int countLeves(Node node) {
+    if(node == null) {
+      return 0;
+    }
+
+    Node left = this.leftChild(node);
+    Node right = this.rightChild(node);
+
+    if(left == null && right == null) {
+      return 1;
+    } else {
+      return this.countLeves(left) + this.countLeves(right);
+    }
+  }
+
+  public int countArcs() {
+    return this.countArcs(this.root());
+  }
+  public int countArcs(Node node) {
+    return this.countNodes() - 1;
+  }
+
+  public int countNodes() {
+    // Can return the local property count also since starting from the root.
+    return this.countNodes(this.root());
+  }
+
+  public int countNodes(Node node) {
+    if(node == null) {
+      return 0;
+    }
+
+    return 1 + (this.countNodes(this.leftChild(node)) + this.countNodes(this.rightChild(node)));
+  }
+
+  public int countInternalNodes() {
+    return this.countInternalNodes(this.root());
+  }
+
+  public int countInternalNodes(Node node) {
+    if(node == null) {
+      return 0;
+    }
+
+    Node left = this.leftChild(node);
+    Node right = this.rightChild(node);
+
+    // Check if Leaf.
+    if(left == null && right == null) {
+      return 0;
+    } else {
+      return 1 + (this.countInternalNodes(left) + this.countInternalNodes(right));
+    }
+
+  }
+
+  public int depth() {
+    return this.depth(this.root());
+  }
+
+  public int depth(Node node) {
+    if(node == null) {
+      return 0;
+    }
+
+    return 1 + (Math.max(this.depth(this.leftChild(node)), this.depth(this.rightChild(node))));
+  }
   
+  private boolean validPosition(int i) {
+    return i < this.tree.size();
+  }
 }
