@@ -24,10 +24,19 @@ public class App {
 
 
     VectorBinaryTree vectorTree = new VectorBinaryTree<String>();
+    Node nodes[] = new Node[strings.length];
 
     for (int i = 0; i < strings.length; ++i) {
-      vectorTree.insert(rand.nextInt(50) + i, strings[i]);
+      nodes[i] = vectorTree.insert(rand.nextInt(50) + i, strings[i]);
     }
+
+    System.out.println("Count: " + nodes.length);
+    System.out.println("Is Root: " + vectorTree.isRoot(nodes[0]));
+    System.out.println("Is External: " + vectorTree.isExternal(nodes[0]));
+    System.out.println("Is Internal: " + vectorTree.isInternal(nodes[0]));
+    System.out.println("Left Child: " + vectorTree.leftChild(nodes[0]));
+    System.out.println("Right Child: " + vectorTree.rightChild(nodes[0]));
+
   
     
   
