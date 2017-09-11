@@ -14,10 +14,24 @@ public class Queue {
   }
 
   public void insert(long j) {
-    this.rear++;
+    // Check if full
+    if(this.isFull() == true) {
+      // Expand the capacity.
+      this.expand();
+    }
+    
+    this.rear = this.nextPos();
+
     this.queArray[this.rear] = j;
     this.nItems++;
   }
+
+  private int nextPos() {
+    int nextRear = (++this.rear);
+
+    return (nextRear >= this.queArray.length) ? nextRear % this.queArray.length : nextRear;
+  }
+
   public long remove() { // remove item from the front of the queue
     long temp = this.queArray[this.front];
     this.front++;
@@ -28,6 +42,33 @@ public class Queue {
     this.nItems--;
 
     return temp;
+  }
+
+  public void expand() {
+    // New max size value.
+    int tempNewMax = this.maxSize * 2;
+
+    // Create a new array of the new size.
+    long newQueArray[] = new long[tempNewMax];
+
+    // Holds the last occupied position in the new array.
+    int rear = 0;
+
+    // Copy 'front' values from the old queArray.
+    for(int i = this.front; i<this.queArray.length; ++i, ++rear) {
+      newQueArray[rear] = this.queArray[i];
+    }
+
+    // Copy the 'back' value from the old queArray.
+    for(int i = 0; i < this.front; ++i, ++rear) {      
+      newQueArray[rear] = this.queArray[i];
+    }
+    
+    // Set the new Values
+    this.maxSize = tempNewMax;
+    this.queArray = newQueArray;
+    this.front = 0;
+    this.rear = --rear;
   }
 
   public long peekFront() {
