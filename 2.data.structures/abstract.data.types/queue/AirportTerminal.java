@@ -38,14 +38,16 @@ public class AirportTerminal {
 
     boolean run = true;
 
-    Queue firstClassStation1;
-    Queue firstClassStation2;
-    Queue coachStation1;
-    Queue coachStation2;
-    Queue coachStation3;
+    // Service Station average delays.
+    int firstStationAvg = 6;
+    int coachStationAvg = 2;
+
+    // Service Station minute counters.
+    int firstClassStations[] = {0,0};
+    int coachStations[] = {0,0,0};
 
     // The probability of a passenger arrival per-minute based on class.
-    int firstAvg = 6;
+    int firstAvg = 5;
     int coachAvg = 2;
 
     int lastFirstClass = 1;
@@ -56,7 +58,7 @@ public class AirportTerminal {
     for(int i = checkInDuration; i > 0; --i, ++lastFirstClass, ++lastCoach) {
 
       // Check if first Class customers arrived.
-      if(AirportTerminal.hasCustomerArrived(firstAvg,lastFirstClass )) {
+      if(AirportTerminal.isEvent(firstAvg,lastFirstClass )) {
         //If added first class reset lastFirstClass
         System.out.println("First Class Customer Arrived");
         first.insert(i);
@@ -64,34 +66,46 @@ public class AirportTerminal {
       }
 
       // Check if coach customer arrived.
-      if(AirportTerminal.hasCustomerArrived(coachAvg,lastCoach )) {
+      if(AirportTerminal.isEvent(coachAvg,lastCoach )) {
         //If added first class reset lastFirstClass
         System.out.println("Coach Customer Arrived");
         coach.insert(i);
         lastCoach = 0;
       }
-      
 
 
+      // Set customer to service stations if empty. 
+      // If not empty, check how long a user has been in the station and calculate the probability of finishing this turn.
 
+      // Coach Stations
+      for(int k = 0; k<coachStations.length; ++k) {
+        System.out.println("coachStations[i]", coachStations[i]);
+        // If the station is empty, and the coach que is not empty, pull in a client.
+        if(coachStations[i] == 0) {
+          
+          if(coach.isEmpty()) {
+            coach.remove();
+            coachStations[i] = 1;
+          } 
+        } else {
+          // Check if the client has been served. 
+          coachStations[i] = AirportTerminal.isEvent(coachStationAvg,coachStations[i]) ? 0 : ++coachStations[i];
+        }
+        
+      }
+
+      // First Class Stations
+      for(int j = 0; j<firstClassStations.length; ++j) {
+        /*
+          * Each service station takes passengers from the corresponding queue; but if a first class service station
+          * is free and the queue for coach is not empty then the service station serves passengers from the coach
+          * queue.
+         */
+      }
     }
-
-
-    // 2 Services stations for first class.
-    // 3 Service station for coach class.
-    /*
-     * Each service station takes passengers from the corresponding queue; but if a first class service station
-     * is free and the queue for coach is not empty then the service station serves passengers from the coach
-     * queue.
-     * /
-     * 
-     * Passenger arrival times are random, but subject to average arrival times; for example, we get a first
-      class passenger every five minutes and a coach passenger every two minutes on average. Actual
-      arrival times are random.
-     */
   }
 
-  public static boolean hasCustomerArrived(int avg, int last) {
+  public static boolean isEvent(int avg, int last) {
     /*
     System.out.println("avg: " + avg);
     System.out.println("last: " + last);
