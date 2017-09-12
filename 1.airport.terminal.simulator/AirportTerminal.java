@@ -46,6 +46,20 @@ public class AirportTerminal {
     };
 
     ServiceStation currentStation;
+   
+
+    /*
+     * Record the maximum wait time in each queue
+     * that a 'customer' had to wait.
+     */ 
+    long firstClassMaxWait = 0;
+    long coachMaxWait = 0;
+    long firstClassTotalWait = 0;
+    long coachTotalWait = 0;
+
+    long queueItem;
+    long currentWaitTime;
+    long diff;
 
     // Count of the last time a customer arrived.
     // Increased with every iteration of the main loop.
@@ -53,6 +67,13 @@ public class AirportTerminal {
     int lastCoachArrivalTime = 1;
 
     for(int i = 0; i < this.duration; ++i, ++lastFirstClassArrivalTime, ++lastCoachArrivalTime) {
+
+      /*
+       * NOTE: Each 'Customer' inserted into the queue is identified by the 
+       * value of the current 'i', which also serves as a timestamp of when the
+       * customer entered the queue.
+       * This value is used to calculate the average and maximum waiting times in the queue.
+       */
 
       // Check if first Class customers arrived.
       if(this.isEvent(this.avgFirstClassArrivalRate, lastFirstClassArrivalTime)) {
@@ -82,7 +103,14 @@ public class AirportTerminal {
         if(!currentStation.isBusy()) {
           
           if(!coachQueue.isEmpty()) {
-            currentStation.service(coachQueue.remove());
+            // The queue item represents the insert time.
+            queueItem = coachQueue.remove();
+            diff = (i - queueItem);
+
+            // Get the difference between 'now' and add to the max.
+            coachMaxWait = diff > coachMaxWait ? diff : coachMaxWait;
+            coachTotalWait += diff;
+            currentStation.service(queueItem);
           } 
         } else {
           // Check if the client has been served. 
@@ -106,13 +134,27 @@ public class AirportTerminal {
         if(!currentStation.isBusy()) {
           
           if(!firstClassQueue.isEmpty()) {
-            currentStation.service(firstClassQueue.remove());
+            // The queue item represents the insert time.
+            queueItem = firstClassQueue.remove();
+
+            diff = (i - queueItem);
+            // Get the difference between 'now' and add to the max.
+            firstClassMaxWait = diff > firstClassMaxWait ? diff : firstClassMaxWait;
+            firstClassTotalWait += diff;
+            currentStation.service(queueItem);
 
           } else if(!coachQueue.isEmpty()) {
-            // If there are no first class customer to service, pull a customer from the coach que.
+            // The queue item represents the insert time.
+            queueItem = coachQueue.remove();
+
+            diff = (i - queueItem);
+
+            // Get the difference between 'now' and add to the max.
+            coachMaxWait = diff > coachMaxWait ? diff : coachMaxWait;
+            coachTotalWait += diff;
+
             currentStation.service(coachQueue.remove());
           }
-
         } else {
           // Check if the client has been served. 
          currentStation.tick();
@@ -127,7 +169,13 @@ public class AirportTerminal {
     System.out.println("Coach Queue Max: " + coachQueue.getMax());
 
     // The average and maximum waiting time for each queue.
-    
+    System.out.println("Coach Queue Max Waiting time: " + coachMaxWait);
+    System.out.println("Coach Queue Average Waiting time: " + (double)coachTotalWait/(double)coachQueue.getMax());
+
+
+    System.out.println("First Class Queue Max Waiting time: " + firstClassMaxWait);
+    System.out.println("First Class Queue Average Waiting time: " + (double)firstClassTotalWait/(double)coachQueue.getMax());
+
     // Rate of occupancy of coach stations
     for(int k = 0; k<coachStations.length; ++k) {
 
