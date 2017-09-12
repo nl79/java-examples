@@ -5,34 +5,7 @@ public class AirportTerminal {
   public static void main(String[] args) {
 
     int checkInDuration = 120;
-    double coachAvgArrival = 25;
-    double firstAvgArrival = 25;
-
-    // Extract the checkInDuration or set defaults.
-    if(args.length >= 1) {
-      try {
-        checkInDuration = Integer.parseInt(args[0]);
-      } catch(NumberFormatException e) {
-        checkInDuration = 50;
-      }
-    }
-    
-    if(args.length >= 2) {
-      try {
-        coachAvgArrival = Double.parseDouble(args[1]);
-      } catch(NumberFormatException e) {
-        coachAvgArrival = 25;
-      }
-    }
-
-    if(args.length == 3) {
-      try {
-        firstAvgArrival = Double.parseDouble(args[2]);
-      } catch(NumberFormatException e) {
-        firstAvgArrival = 25;
-      }
-    }
-
+  
     Queue first = new Queue(50);
     Queue coach = new Queue(50);
 
@@ -79,17 +52,19 @@ public class AirportTerminal {
 
       // Coach Stations
       for(int k = 0; k<coachStations.length; ++k) {
-        System.out.println("coachStations[i]", coachStations[i]);
+        System.out.println("coachStations[k]" + coachStations[k]);
         // If the station is empty, and the coach que is not empty, pull in a client.
-        if(coachStations[i] == 0) {
+        if(coachStations[k] == 0) {
           
-          if(coach.isEmpty()) {
+          if(!coach.isEmpty()) {
             coach.remove();
-            coachStations[i] = 1;
+            coachStations[k] = 1;
           } 
         } else {
           // Check if the client has been served. 
-          coachStations[i] = AirportTerminal.isEvent(coachStationAvg,coachStations[i]) ? 0 : ++coachStations[i];
+          boolean done = AirportTerminal.isEvent(coachStationAvg,coachStations[k]);
+          System.out.println("coachStations[k] - done?" + done);
+          coachStations[k] =  done ? 0 : ++coachStations[k];
         }
         
       }
@@ -101,8 +76,38 @@ public class AirportTerminal {
           * is free and the queue for coach is not empty then the service station serves passengers from the coach
           * queue.
          */
+        System.out.println("firstClassStations[j]" + firstClassStations[j]);
+        // If the station is empty, and the coach que is not empty, pull in a client.
+        if(firstClassStations[j] == 0) {
+          
+          if(!first.isEmpty()) {
+            first.remove();
+            firstClassStations[j] = 1;
+
+          } else if(!coach.isEmpty()) {
+            // If there are no first class customer to service, pull a customer from the coach que.
+            coach.remove();
+            firstClassStations[j] = 1;
+          }
+
+        } else {
+          // Check if the client has been served. 
+          boolean done = AirportTerminal.isEvent(firstStationAvg,firstClassStations[j]);
+          System.out.println("firstClassStations[j] - done?" + done);
+          firstClassStations[j] =  done ? 0 : ++firstClassStations[j];
+        }
       }
     }
+
+    System.out.println("Duration of the Simulation: " + checkInDuration);
+    System.out.println("Maximum First Class Queue: " + first.getMax());
+    System.out.println("Maximum Coach Queue: " + coach.getMax());
+    System.out.println("Maximum First Class Queue Waiting Time: " + first.getMax());
+    System.out.println("Maximum Coach Queue Waiting Time: " + first.getMax());
+    System.out.println("Maximum First Class Queue Waiting Time: " + first.getMax());
+
+
+
   }
 
   public static boolean isEvent(int avg, int last) {
