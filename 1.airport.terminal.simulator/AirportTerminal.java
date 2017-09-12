@@ -3,12 +3,18 @@ import java.util.Random;
 public class AirportTerminal {
 
   private int duration = 120;
-  private int avgCoachArrivalRate = 2;
-  private int avgCoachServiceRate = 2;
-  private int avgFirstClassArrivalRate = 5;
-  private int avgFirstClassServiceRate = 6;
+  private double avgCoachArrivalRate = 2;
+  private double avgCoachServiceRate = 2;
+  private double avgFirstClassArrivalRate = 5;
+  private double avgFirstClassServiceRate = 6;
 
-  public AirportTerminal() {  }
+  private Random rand;
+
+  public AirportTerminal() { 
+
+    this.rand = new Random();
+
+   }
 
   public void setDuration(int i) {
     this.duration = i;
@@ -77,16 +83,12 @@ public class AirportTerminal {
 
       // Check if first Class customers arrived.
       if(this.isEvent(this.avgFirstClassArrivalRate, lastFirstClassArrivalTime)) {
-        //If added first class reset lastFirstClass
-        System.out.println("First Class Customer Arrived");
         firstClassQueue.insert(i);
         lastFirstClassArrivalTime = 0;
       }
 
       // Check if coach customer arrived.
       if(this.isEvent(this.avgCoachArrivalRate, lastCoachArrivalTime)) {
-        //If added first class reset lastFirstClass
-        System.out.println("Coach Customer Arrived");
         coachQueue.insert(i);
         lastCoachArrivalTime = 0;
       }
@@ -106,7 +108,7 @@ public class AirportTerminal {
             // The queue item represents the insert time.
             queueItem = coachQueue.remove();
             diff = (i - queueItem);
-
+            
             // Get the difference between 'now' and add to the max.
             coachMaxWait = diff > coachMaxWait ? diff : coachMaxWait;
             coachTotalWait += diff;
@@ -115,8 +117,6 @@ public class AirportTerminal {
         } else {
           // Check if the client has been served. 
           currentStation.tick();
-          System.out.println("Coach Station - Done: " + currentStation.isDone());
-
         }
         
       }
@@ -158,8 +158,6 @@ public class AirportTerminal {
         } else {
           // Check if the client has been served. 
          currentStation.tick();
-         System.out.println("First Class Station - Done: " + currentStation.isDone());
-
         }       
       }
     }
@@ -192,11 +190,7 @@ public class AirportTerminal {
     }
   }
 
-  private boolean isEvent(int avg, int last) {
-    Random random = new Random(); 
-    double probability = random.nextInt(avg+1) * ((double)last/(double)avg);
-    //System.out.println("probability: " + probability);
-    return probability > 0.9;
+  private boolean isEvent(double avg, int last) {
+    return (1/avg) >= this.rand.nextDouble();
   }
-
 }

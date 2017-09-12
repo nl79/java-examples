@@ -3,7 +3,7 @@ import java.util.Random;
 public class ServiceStation {
   // Type of service station.
   private int type;
-  private int avgServiceTime;
+  private double avgServiceTime;
 
   private long serviceTime = 0;
 
@@ -15,7 +15,7 @@ public class ServiceStation {
 
   private Random rand; 
 
-  public ServiceStation(int type, int avg) {
+  public ServiceStation(int type, double avg) {
     this.type = type;
     this.avgServiceTime = avg;
 
@@ -25,7 +25,7 @@ public class ServiceStation {
   public int getType() {
     return this.type;
   }
-  public void setAvgServiceTime(int i) {
+  public void setAvgServiceTime(double i) {
     this.avgServiceTime = i;
   }
   
@@ -55,9 +55,10 @@ public class ServiceStation {
     // If no customer exists, return true;
     if(this.customer == 0) { return true; }
 
-    double probability = this.rand.nextInt(this.avgServiceTime+1) * ((double)this.serviceTime/(double)this.avgServiceTime);
+    //double probability = this.rand.nextInt(this.avgServiceTime+1) * ((double)this.serviceTime/(double)this.avgServiceTime);
+    boolean event = (1/this.avgServiceTime) >= this.rand.nextDouble();
     //System.out.println("probability: " + probability);
-    if(probability > 0.9) {
+    if(event) {
       // Record the time it took.
       this.totalTime+=this.serviceTime;
 
