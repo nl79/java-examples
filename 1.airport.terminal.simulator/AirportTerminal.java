@@ -27,7 +27,7 @@ public class AirportTerminal {
   private void init() {
     this.rand = new Random();
   }
-  
+
   public void setDuration(int i) {
     this.duration = i;
   }
@@ -56,12 +56,19 @@ public class AirportTerminal {
       new ServiceStation(1, this.avgFirstClassServiceRate),
       new ServiceStation(1, this.avgFirstClassServiceRate)
     };
+
+    // The count of free first class service stations.
+    int emptyFirstClassStations = 0;
+
     // Coach
     ServiceStation coachStations[] = {
       new ServiceStation(2, this.avgCoachServiceRate),
       new ServiceStation(2, this.avgCoachServiceRate),
       new ServiceStation(2, this.avgCoachServiceRate)
     };
+
+    // The count of free coach service stations.
+    int emptyCoachStations = 0;
 
     ServiceStation currentStation;
 
@@ -84,7 +91,10 @@ public class AirportTerminal {
     int lastFirstClassArrivalTime = 1;
     int lastCoachArrivalTime = 1;
 
-    for(int i = 0; i < this.duration; ++i, ++lastFirstClassArrivalTime, ++lastCoachArrivalTime) {
+    // Flag that determines if the simulation is to keep running.
+    boolean run = true;
+
+    for(int i = 0; i < this.duration && run == true; ++i , ++lastFirstClassArrivalTime, ++lastCoachArrivalTime) {
 
       /*
        * NOTE: Each 'Customer' inserted into the queue is identified by the
@@ -93,16 +103,26 @@ public class AirportTerminal {
        * This value is used to calculate the average and maximum waiting times in the queue.
        */
 
-      // Check if first Class customers arrived.
-      if(this.isEvent(this.avgFirstClassArrivalRate, lastFirstClassArrivalTime)) {
-        firstClassQueue.insert(i);
-        lastFirstClassArrivalTime = 0;
-      }
+      // Check if check-in is over
+      if(i < this.duration) {
 
-      // Check if coach customer arrived.
-      if(this.isEvent(this.avgCoachArrivalRate, lastCoachArrivalTime)) {
-        coachQueue.insert(i);
-        lastCoachArrivalTime = 0;
+        // Check if first Class customers arrived.
+        if(this.isEvent(this.avgFirstClassArrivalRate, lastFirstClassArrivalTime)) {
+          firstClassQueue.insert(i);
+          lastFirstClassArrivalTime = 0;
+        }
+
+        // Check if coach customer arrived.
+        if(this.isEvent(this.avgCoachArrivalRate, lastCoachArrivalTime)) {
+          coachQueue.insert(i);
+          lastCoachArrivalTime = 0;
+        }
+
+      } else {
+
+        // Set the run flag to false to signal possible end of processing.
+        run = false;
+
       }
 
 
@@ -110,6 +130,8 @@ public class AirportTerminal {
       // If not empty, check how long a user has been in the station and calculate the probability of finishing this turn.
 
       // Coach Stations
+      // Reset empty coach station count
+      emptyCoachStations = 0;
       for(int k = 0; k<coachStations.length; ++k) {
 
         currentStation = coachStations[k];
@@ -125,7 +147,12 @@ public class AirportTerminal {
             coachMaxWait = diff > coachMaxWait ? diff : coachMaxWait;
             coachTotalWait += diff;
             currentStation.service(queueItem);
+          } else {
+            // Queue is empty and stations is free.
+            // Increment empty coach stations count.
+            emptyCoachStations++;
           }
+
         } else {
           // Check if the client has been served.
           currentStation.tick();
@@ -134,6 +161,8 @@ public class AirportTerminal {
       }
 
       // First Class Stations
+      // Reset empty First Class stations count
+      emptyFirstClassStations = 0;
       for(int j = 0; j<firstClassStations.length; ++j) {
         /*
           * Each service station takes passengers from the corresponding queue; but if a first class service station
@@ -166,12 +195,24 @@ public class AirportTerminal {
             coachTotalWait += diff;
 
             currentStation.service(coachQueue.remove());
+          } else {
+            // Increment empty stations count.
+            emptyFirstClassStations++;
           }
         } else {
           // Check if the client has been served.
          currentStation.tick();
         }
       }
+
+      // Check if Queues and stations are empty.
+      if( run == false &&
+          coachQueue.isEmpty() == true &&
+          firstClassQueue.isEmpty() == true &&
+          emptyFirstClassStations == firstClassStations.length &&
+          emptyCoachStations == coachStations.length ) {
+            break;
+          }
     }
 
     System.out.println("Duration: " + this.duration);
