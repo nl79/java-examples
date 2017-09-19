@@ -94,7 +94,7 @@ public class AirportTerminal {
     // Flag that determines if the simulation is to keep running.
     boolean run = true;
 
-    for(int i = 0; i < this.duration && run == true; ++i , ++lastFirstClassArrivalTime, ++lastCoachArrivalTime) {
+    for(int i = 0; i < this.duration || run == true; ++i , ++lastFirstClassArrivalTime, ++lastCoachArrivalTime) {
 
       /*
        * NOTE: Each 'Customer' inserted into the queue is identified by the
@@ -119,10 +119,8 @@ public class AirportTerminal {
         }
 
       } else {
-
         // Set the run flag to false to signal possible end of processing.
         run = false;
-
       }
 
 
@@ -211,7 +209,10 @@ public class AirportTerminal {
           firstClassQueue.isEmpty() == true &&
           emptyFirstClassStations == firstClassStations.length &&
           emptyCoachStations == coachStations.length ) {
+            System.out.println("Exiting Simulation");
             break;
+          } else {
+            run = true;
           }
     }
 

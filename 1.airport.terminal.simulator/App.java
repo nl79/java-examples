@@ -13,19 +13,19 @@ public class App {
     double avgFirstClassServiceRate = 6;
 
     Scanner reader = new Scanner(System.in);
-    System.out.println("Simulation Duration(Minutes): ");
+    System.out.print("Simulation Duration(Minutes): ");
     duration = reader.nextInt();
 
-    System.out.println("Average Coach Arrival Rate(Minutes): ");
+    System.out.print("Average Coach Arrival Rate(Minutes): ");
     avgCoachArrivalRate = reader.nextDouble();
 
-    System.out.println("Average Coach Service Time(Minutes): ");
+    System.out.print("Average Coach Service Time(Minutes): ");
     avgCoachServiceRate = reader.nextDouble();
 
-    System.out.println("Average First Class Arrival Rate(Minutes): ");
+    System.out.print("Average First Class Arrival Rate(Minutes): ");
     avgFirstClassArrivalRate = reader.nextDouble();
 
-    System.out.println("Average First Class Service Time(Minutes): ");
+    System.out.print("Average First Class Service Time(Minutes): ");
     avgFirstClassServiceRate = reader.nextDouble();
 
     AirportTerminal simulation = new AirportTerminal();
