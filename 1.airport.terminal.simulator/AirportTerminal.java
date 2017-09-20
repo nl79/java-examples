@@ -139,6 +139,7 @@ public class AirportTerminal {
           if(!coachQueue.isEmpty()) {
             // The queue item represents the insert time.
             queueItem = coachQueue.remove();
+
             diff = (i - queueItem);
 
             // Get the difference between 'now' and add to the max.
@@ -192,7 +193,9 @@ public class AirportTerminal {
             coachMaxWait = diff > coachMaxWait ? diff : coachMaxWait;
             coachTotalWait += diff;
 
-            currentStation.service(coachQueue.remove());
+            currentStation.service(queueItem);
+
+
           } else {
             // Increment empty stations count.
             emptyFirstClassStations++;

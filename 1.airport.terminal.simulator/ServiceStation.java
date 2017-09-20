@@ -11,9 +11,10 @@ public class ServiceStation {
 
   private long totalCustomers = 0;
   private long totalTime = 0;
+  private double occupancy = 0;
 
 
-  private Random rand; 
+  private Random rand;
 
   public ServiceStation(int type, double avg) {
     this.type = type;
@@ -28,10 +29,11 @@ public class ServiceStation {
   public void setAvgServiceTime(double i) {
     this.avgServiceTime = i;
   }
-  
+
   public double getOccupancyRate(long duration) {
     if(duration == 0) { return 0; }
-    return (double)this.totalTime / (double)duration;
+    occupancy = (double)this.totalTime / (double)duration;
+    return occupancy > 1 ? 1 : occupancy;
   }
 
   public void service(long c) {

@@ -28,7 +28,13 @@ public class App {
     System.out.print("Average First Class Service Time(Minutes): ");
     avgFirstClassServiceRate = reader.nextDouble();
 
-    AirportTerminal simulation = new AirportTerminal();
+    AirportTerminal simulation = new AirportTerminal(
+      duration,
+      avgCoachArrivalRate,
+      avgCoachServiceRate,
+      avgFirstClassArrivalRate,
+      avgFirstClassServiceRate
+      );
 
     simulation.run();
 
