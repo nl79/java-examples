@@ -1,68 +1,131 @@
-class Pipe {
-  String s;
-  int pos = 0;
 
-  boolean ignoreEmpty = true;
 
-  public Pipe(String s) {
-    this.s = s;
-  }
+class Node {
+  Node left;
+  Node right;
 
-  public boolean hasNext() {
-    return (this.pos + 1) < this.s.length();
-  }
+  char val;
 
-  // Get the next token.
-  public char next() throws Exception {
-    return (char)this.next(1);
+  public Node() { }
 
-  }
-
-  // Get the next token at position i.
-  public char next(int i) throws Exception {
-
-    if(this.hasNext()) {
-      this.pos = this.pos + 1;
-      return this.s.charAt(pos);
-    } else {
-      throw new Exception("End of input reached");
-    }
-  }
-
-  // Look ahead 1 token.
-  public char peak() {
-    return this.peak(1);
-  }
-
-  // Look ahead n tokens.
-  public char peak(int n) {
-    int pos = this.pos + n;
-    if(pos < this.s.length()) {
-      return this.s.charAt(pos);
-    } else {
-      return '\0';
-    }
-  }
-
-  public void ignoreEmpty(boolean b) {
-    this.ignoreEmpty = b;
+  public double value() throws Exception {
+    return this.val;
   }
 }
 
-class Node {
-  public Node() {
+class Factor extends Expression {
+  public static Expression Tree(Pipe p) throws Exception {
+     char c = p.peek();
+     if ( Character.isDigit(c) ) {
+         return new Digit(p.next());
+     }
+     else if ( c == '(' ) {
+       p.next();
+       Expression exp = Expression.Tree(p);
 
+       if ( p.peek() != ')' ) {
+           throw new Exception("Missing closing parenthesis.");
+       }
+
+       p.next();
+       return exp;
+     }
+     else {
+       switch(c) {
+         case '+':
+         case '-':
+         case '*':
+         case '/':
+            throw new Exception("Unexpected operator encountered");
+         case '\n':
+            throw new Exception("Unexpected end of line");
+         default:
+            throw new Exception("Unexpected token '" + c + "'");
+       }
+     }
+  }
+}
+
+class Term extends Expression {
+  public static Expression Tree(Pipe p) throws Exception {
+
+      Expression term;
+      term = Factor.Tree(p);
+
+      while ( p.peek() == '*' || p.peek() == '/' ) {
+
+          term = new Operator(p.next(),term,Factor.Tree(p));
+      }
+      return term;
+  }
+}
+
+public class Expression extends Node {
+  public static Expression Tree(Pipe p) throws Exception {
+
+    Expression exp = Term.Tree(p);
+
+    while ( p.peek() == '+' || p.peek() == '-' ) {
+        exp = new Operator(p.next(), exp, Term.Tree(p));
+    }
+    return exp;
+  }
+  public Expression() {
+  }
+}
+
+class Operator extends Expression{
+
+  // Valid Operators.
+  String operators = "+-*/";
+
+  public Operator(char op, Expression left, Expression right) throws Exception  {
+
+    if(this.operators.indexOf(op) == -1) {
+      throw new Exception("Invalid Operator Supplied");
+    }
+
+    if(left == null || right == null) {
+      throw new Exception("Expression nodes cannot be null");
+
+    }
+
+    this.val = op;
+    this.left = left;
+    this.right = right;
   }
 
-  // Return Subtree.
-  public void getTree() {
+  @Override
+  public double value() throws Exception {
+     double x = left.value();
+     double y = right.value();
+     switch (this.val) {
+       case '+':
+        return x + y;
+       case '-':
+        return x - y;
+       case '*':
+        return x * y;
+       case '/':
+        return x / y;
+       default:
+        throw new Exception("Invalid Arithmetic Operator.");
+     }
+  }
+}
 
+class Digit extends Expression {
+  public Digit(char d){
+    this.val = d;
   }
 
-  private void parse(String exp) {
-    // Read the next token.
-    int pos = exp.indexOf(" ");
-    String sub = exp.substring(0, pos);
-  }
+  @Override
+  public double value() {
+    try {
+      return Double.parseDouble(Character.toString(this.val));
+    } catch(Exception e) {
+      return 0;
+    }
 
+  }
 }
