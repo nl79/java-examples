@@ -11,6 +11,35 @@ class Node {
   public double value() throws Exception {
     return this.val;
   }
+
+  public void draw(int show, int curr, char c) {
+
+    if(show == curr) {
+      System.out.print(c + "( " + this.val + " )");
+    }
+
+    if(this.left != null) {
+      this.left.draw(show, curr+1, 'L');
+    }
+
+    if(this.right != null) {
+      this.right.draw(show, curr+1, 'R');
+    }
+  }
+
+  public void draw() throws Exception {
+
+    System.out.println("( " + this.val + " )");
+
+    if(this.left != null) {
+      this.left.draw();
+    }
+
+    if(this.right != null) {
+      this.right.draw();
+    }
+
+  }
 }
 
 class Factor extends Expression {
