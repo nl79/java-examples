@@ -15,9 +15,6 @@ public class App {
     Pipe pipe = new Pipe(expression);
     pipe.ignoreEmpty(true);
 
-    //System.out.println("Digit: " + pipe.peekDigit());
-    //Expression expTree = new Expression(pipe);
-
     Expression expTree;
 
     try {

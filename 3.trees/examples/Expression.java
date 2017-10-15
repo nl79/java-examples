@@ -88,13 +88,12 @@ class Term extends Expression {
   public static Expression Parse(Pipe p) throws Exception {
 
       Expression term = Factor.Parse(p);
-      
+
       /*
        * Check if the term is followed by '*' or '/'
        * if so, create an Operator node and supply the left and right children.
        */
       while ( p.peek() == '*' || p.peek() == '/' ) {
-
           term = new Operator(p.nextToken(),term,Factor.Parse(p));
       }
       return term;
@@ -115,7 +114,7 @@ public class Expression extends Node {
      * if so, create an Operator node and supply the left and right children.
      */
     while ( p.peek() == '+' || p.peek() == '-' ) {
-        term = new Operator(p.nextToken(), term, Term.Parse(p));
+        term = new Operator(p.nextToken(), term, Expression.Parse(p));
     }
 
     // Return the <term>
