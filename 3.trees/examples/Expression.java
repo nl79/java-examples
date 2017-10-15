@@ -4,12 +4,12 @@ class Node {
   Node left;
   Node right;
 
-  char val;
+  String val;
 
   public Node() { }
 
   public double value() throws Exception {
-    return this.val;
+    return Double.parseDouble(this.val);
   }
 
   public void draw(int show, int curr, char c) {
@@ -43,14 +43,32 @@ class Node {
 }
 
 class Factor extends Expression {
-  public static Expression Tree(Pipe p) throws Exception {
-     char c = p.peek();
-     if ( Character.isDigit(c) ) {
-         return new Digit(p.next());
+  public static Expression Parse(Pipe p) throws Exception {
+    /* <factor> ::= <digit> | (<expression>) */
+     char token;
+     String number = "";
+
+     while(true) {
+       token = p.peek();
+       // Check if <digit>
+       if ( Character.isDigit(token) ) {
+           number += token;
+           p.next();
+       } else {
+         break;
+       }
      }
-     else if ( c == '(' ) {
+
+     // Check if <digit>
+     if ( Digit.isInteger(number) ) {
+       //p.next();
+         return new Digit(number);
+     }
+
+     // Check if '(' followed by an <expression> followed by a ')'
+     else if ( token == '(' ) {
        p.next();
-       Expression exp = Expression.Tree(p);
+       Expression exp = Expression.Parse(p);
 
        if ( p.peek() != ')' ) {
            throw new Exception("Missing closing parenthesis.");
@@ -60,44 +78,48 @@ class Factor extends Expression {
        return exp;
      }
      else {
-       switch(c) {
-         case '+':
-         case '-':
-         case '*':
-         case '/':
-            throw new Exception("Unexpected operator encountered");
-         case '\n':
-            throw new Exception("Unexpected end of line");
-         default:
-            throw new Exception("Unexpected token '" + c + "'");
-       }
+        // Invalid token.
+        throw new Exception("Unexpected token '" + token + "'");
      }
   }
 }
 
 class Term extends Expression {
-  public static Expression Tree(Pipe p) throws Exception {
+  public static Expression Parse(Pipe p) throws Exception {
 
-      Expression term;
-      term = Factor.Tree(p);
-
+      Expression term = Factor.Parse(p);
+      
+      /*
+       * Check if the term is followed by '*' or '/'
+       * if so, create an Operator node and supply the left and right children.
+       */
       while ( p.peek() == '*' || p.peek() == '/' ) {
 
-          term = new Operator(p.next(),term,Factor.Tree(p));
+          term = new Operator(p.nextToken(),term,Factor.Parse(p));
       }
       return term;
   }
 }
 
 public class Expression extends Node {
-  public static Expression Tree(Pipe p) throws Exception {
+  public static Expression Parse(Pipe p) throws Exception {
 
-    Expression exp = Term.Tree(p);
+    /* <expression> ::= <term> + <expression> | <term> - <expression> | <term> */
 
+    //Get the term.
+    Expression term = Term.Parse(p);
+
+
+    /*
+     * Check if the term is followed by '+' or '-'
+     * if so, create an Operator node and supply the left and right children.
+     */
     while ( p.peek() == '+' || p.peek() == '-' ) {
-        exp = new Operator(p.next(), exp, Term.Tree(p));
+        term = new Operator(p.nextToken(), term, Term.Parse(p));
     }
-    return exp;
+
+    // Return the <term>
+    return term;
   }
   public Expression() {
   }
@@ -108,7 +130,7 @@ class Operator extends Expression{
   // Valid Operators.
   String operators = "+-*/";
 
-  public Operator(char op, Expression left, Expression right) throws Exception  {
+  public Operator(String op, Expression left, Expression right) throws Exception  {
 
     if(this.operators.indexOf(op) == -1) {
       throw new Exception("Invalid Operator Supplied");
@@ -128,7 +150,7 @@ class Operator extends Expression{
   public double value() throws Exception {
      double x = left.value();
      double y = right.value();
-     switch (this.val) {
+     switch (this.val.charAt(0)) {
        case '+':
         return x + y;
        case '-':
@@ -144,17 +166,29 @@ class Operator extends Expression{
 }
 
 class Digit extends Expression {
-  public Digit(char d){
+
+  public static boolean isInteger(String s) {
+    try {
+        Integer.parseInt(s);
+    } catch(NumberFormatException e) {
+        return false;
+    } catch(NullPointerException e) {
+        return false;
+    }
+    // only got here if we didn't return false
+    return true;
+  }
+
+  public Digit(String d){
     this.val = d;
   }
 
   @Override
   public double value() {
     try {
-      return Double.parseDouble(Character.toString(this.val));
+      return Double.parseDouble(this.val);
     } catch(Exception e) {
       return 0;
     }
-
   }
 }

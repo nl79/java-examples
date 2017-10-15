@@ -14,11 +14,14 @@ public class App {
 
     Pipe pipe = new Pipe(expression);
     pipe.ignoreEmpty(true);
+
+    //System.out.println("Digit: " + pipe.peekDigit());
     //Expression expTree = new Expression(pipe);
+
     Expression expTree;
 
     try {
-      expTree = Expression.Tree(pipe);
+      expTree = Expression.Parse(pipe);
 
       System.out.println("value: " + expTree.value());
 

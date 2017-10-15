@@ -39,6 +39,10 @@ class Pipe {
     return this.nextChar();
   }
 
+  public String nextToken() throws Exception  {
+    return Character.toString(this.next());
+  }
+
   private char nextChar() throws Exception {
     if(this.hasNext()) {
       this.current = this.s.charAt(this.nextPos);
@@ -71,6 +75,43 @@ class Pipe {
     } catch(Exception e) {
       return '\0';
     }
+  }
+
+  public String peekInt() {
+    int i = this.nextPos;
+    String digit = "";
+    char temp;
+
+    for(; i < this.s.length(); ++i) {
+      temp = this.s.charAt(i);
+      if(Character.isDigit(temp)) {
+        digit += temp;
+      } else {
+        break;
+      }
+    }
+
+    return digit;
+  }
+
+  public String nextInt() {
+    int i = this.nextPos;
+    String digit = "";
+    char temp;
+
+    for(; i < this.s.length(); ++i) {
+      temp = this.s.charAt(i);
+      if(Character.isDigit(temp)) {
+        digit += temp;
+      } else {
+        break;
+      }
+    }
+
+    this.nextPos = i-1;
+    this.current = this.s.charAt(i-1);
+
+    return digit;
   }
 
   private boolean isBlank(char c) {
