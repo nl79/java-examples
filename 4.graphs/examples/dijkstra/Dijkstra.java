@@ -1,0 +1,6 @@
+class Dijkstra {
+
+  public Dijkstra() {
+    
+  }
+}
