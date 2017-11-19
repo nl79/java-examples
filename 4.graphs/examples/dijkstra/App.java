@@ -8,8 +8,6 @@ public class App {
 
   public static void main(String[] args) {
 
-
-    Edge edge;
     Graph graph = new Graph();
     Dijkstra d;
     int startNode;
@@ -26,7 +24,7 @@ public class App {
 
     //Create the nodes.
     for(int i = 1; i <= count; ++i) {
-      graph.addNode(new Node(i));
+      graph.addNode(i);
       nodes = nodes + "( " + i + " ) |";
     }
 
@@ -47,8 +45,10 @@ public class App {
       System.out.print("Edge Weight: ");
       weight = sc.nextInt();
 
-      edge = new Edge(1, graph.getNodeAt(startNode), graph.getNodeAt(endNode), weight);
+      graph.addEdge(startNode-1, endNode-1, weight);
 
     }
+
+    graph.print();
   }
 }
