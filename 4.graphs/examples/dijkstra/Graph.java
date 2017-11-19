@@ -3,21 +3,21 @@ import java.util.ArrayList;
 class Edge {
 
   private Node to;
-  private int weight = 0;
+  private int distance = 0;
 
   public Edge() { }
 
-  public Edge(Node to, int weight) {
+  public Edge(Node to, int d) {
     this.to = to;
-    this.weight = weight;
+    this.distance = distance;
   }
 
   public Node to() {
     return this.to;
   }
 
-  public int weight() {
-    return this.weight;
+  public int distance() {
+    return this.distance;
   }
 }
 
@@ -29,7 +29,14 @@ class Node {
   private boolean visited;
   private String name;
 
+  // Edges leading out of the current node.
   ArrayList<Edge> edges = new ArrayList();
+
+  /*
+   * The path of nodes from source to destination
+   * based on the current distance.
+   */
+  ArrayList<Node> nodes = new ArrayList();
 
   public Node() {}
 
@@ -50,8 +57,25 @@ class Node {
     this.hops = Integer.MAX_VALUE;
   }
 
+  public int getDistance() {
+    return this.distance;
+  }
+
+  public int setDistance(int value) {
+    return this.distance = value;
+  }
+
   public int getId() {
     return this.id;
+  }
+
+  public Node visit() {
+    this.visited = true;
+    return this;
+  }
+
+  public boolean visited() {
+    return this.visited;
   }
 
   public Node addEdge(Edge e) {
@@ -61,20 +85,28 @@ class Node {
     return this;
   }
 
-  public Node getClosestSibling() {
+  public Node getClosestNode() {
 
-    int weight = Integer.MAX_VALUE;
+    return this.getClosestEdge().to();
+  }
+
+  public Edge getClosestEdge() {
+    int distance = Integer.MAX_VALUE;
     Edge min = null;
     Edge curr = null;
 
     for (int i=0; i < this.edges.size(); i++) {
       curr = this.edges.get(i);
-      if(curr.weight() < weight) {
+
+      if(curr.distance() < distance) {
+
+        distance = curr.distance();
         min = curr;
+
       }
     }
 
-    return min.to();
+    return min;
   }
 
   public boolean equals(Node node) {
@@ -89,7 +121,7 @@ class Node {
 
       current = this.edges.get(i);
 
-      System.out.print(current.to().getId() + "(" + current.weight()  + ")" + " ");
+      System.out.print(current.to().getId() + "(" + current.distance()  + ")" + " ");
     }
 
     System.out.print("]");

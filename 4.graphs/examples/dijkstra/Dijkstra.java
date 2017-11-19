@@ -1,13 +1,16 @@
+import java.util.ArrayList;
 class Dijkstra {
 
-  Graph graph;
-  Node from;
-  Node to;
+  private Graph graph;
+  private Node from;
+  private Node to;
 
-
+  private ArrayList<Integer> visited = new ArrayList();
 
   public Dijkstra(Graph g) {
     this.graph = g;
+
+
   }
 
   public Dijkstra from(Node n) {
@@ -20,11 +23,54 @@ class Dijkstra {
     return this;
   }
 
-  public void execute() {
-
+  public Node execute() {
+    return this.traverse();
   }
 
-  private boolean traverse(Node n, int min) {
-    return false;
+  private Node traverse() {
+
+    this.from.setDistance(0);
+    return this.traverse(this.from);
+  }
+  private Node traverse(Node n) {
+
+    System.out.println("Visiting: " + n.getId());
+
+    Edge edge = n.getClosestEdge();
+    Node next = edge.to();
+    int distance = 0;
+
+
+    // Get the new total distance.
+    distance = n.getDistance() + edge.distance();
+
+    // Check if the current distance to the node is smaller than the new one.
+    if(distance < next.getDistance()) {
+
+      next.setDistance(distance);
+
+      // Set the full path of the node.
+    }
+
+    // Set the node as visited.
+    n.visit();
+
+    // Base case.
+    if(this.to.getId() == next.getId()) {
+
+
+      return next;
+      
+    } else if(next.visited()) {
+      System.out.println("visited");
+      return next;
+
+    } {
+
+      System.out.println("here");
+      return this.traverse(next);
+
+    }
+
   }
 }
