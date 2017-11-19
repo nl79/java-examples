@@ -49,6 +49,12 @@ public class App {
 
     }
 
+    System.out.println("\nCurrent Graph Configuration");
     graph.print();
+
+    System.out.println("\nExecuting Dijkstra");
+    d = new Dijkstra(graph);
+    d.execute();
+
   }
 }

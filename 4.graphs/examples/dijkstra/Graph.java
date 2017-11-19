@@ -62,7 +62,19 @@ class Node {
   }
 
   public Node getClosestSibling() {
-    return new Node();
+
+    int weight = Integer.MAX_VALUE;
+    Edge min = null;
+    Edge curr = null;
+
+    for (int i=0; i < this.edges.size(); i++) {
+      curr = this.edges.get(i);
+      if(curr.weight() < weight) {
+        min = curr;
+      }
+    }
+
+    return min.to();
   }
 
   public boolean equals(Node node) {
