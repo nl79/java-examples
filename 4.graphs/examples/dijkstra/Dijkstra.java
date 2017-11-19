@@ -36,7 +36,7 @@ class Dijkstra {
 
     System.out.println("Visiting: " + n.getId());
 
-    Edge edge = n.getClosestEdge();
+    Edge edge = n.getClosestUnvisitedEdge();
     Node next = edge.to();
     int distance = 0;
 

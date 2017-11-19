@@ -9,7 +9,7 @@ class Edge {
 
   public Edge(Node to, int d) {
     this.to = to;
-    this.distance = distance;
+    this.distance = d;
   }
 
   public Node to() {
@@ -89,6 +89,34 @@ class Node {
 
     return this.getClosestEdge().to();
   }
+
+
+  public Edge getClosestUnvisitedEdge() {
+
+    int distance = Integer.MAX_VALUE;
+    Edge min = null;
+    Edge curr = null;
+
+    for (int i=0; i < this.edges.size(); i++) {
+      curr = this.edges.get(i);
+
+      //Check if visited.
+      if(curr.to().visited()) {
+        continue;
+      }
+
+      if(curr.distance() < distance) {
+
+        distance = curr.distance();
+        min = curr;
+
+      }
+    }
+
+    return min;
+
+  }
+
 
   public Edge getClosestEdge() {
     int distance = Integer.MAX_VALUE;
