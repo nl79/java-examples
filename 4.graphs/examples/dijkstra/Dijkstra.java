@@ -4,12 +4,20 @@ class Dijkstra {
   private Graph graph;
   private Node from;
   private Node to;
+  boolean done = false;
 
-  private ArrayList<Integer> visited = new ArrayList();
+  private ArrayList<Integer> visited;
 
   public Dijkstra(Graph g) {
     this.graph = g;
 
+    // Array of visited nodes and their total costs.
+    this.visited = new ArrayList();
+
+    // Initialize the visisted array
+    for(int i = 0; i <= this.graph.size(); ++i) {
+      this.visited.add(i, Integer.MAX_VALUE);
+    }
 
   }
 
@@ -33,44 +41,52 @@ class Dijkstra {
     return this.traverse(this.from);
   }
   private Node traverse(Node n) {
-
-    System.out.println("Visiting: " + n.getId());
-
-    Edge edge = n.getClosestUnvisitedEdge();
-    Node next = edge.to();
-    int distance = 0;
-
-
-    // Get the new total distance.
-    distance = n.getDistance() + edge.distance();
-
-    // Check if the current distance to the node is smaller than the new one.
-    if(distance < next.getDistance()) {
-
-      next.setDistance(distance);
-
-      // Set the full path of the node.
-    }
-
     // Set the node as visited.
     n.visit();
 
-    // Base case.
-    if(this.to.getId() == next.getId()) {
+    Edge edge = null;
+
+    Node next = null;
+
+    while((edge = n.getClosestUnvisitedEdge()) != null && this.done != true) {
+
+      next = edge.to();
+
+      int distance = 0;
 
 
-      return next;
-      
-    } else if(next.visited()) {
-      System.out.println("visited");
-      return next;
+      // Get the new total distance.
+      distance = n.getDistance() + edge.distance();
 
-    } {
+      System.out.println("Current Node: " + n.getId() +
+              " Next Node: " + next.getId() +
+              " | Distance: " + distance);
 
-      System.out.println("here");
-      return this.traverse(next);
+      // Check if the current distance to the node is smaller than the new one.
+      if (distance < next.getDistance()) {
+
+        next.setDistance(distance);
+
+        this.visited.set(next.getId(), distance);
+
+        // Set the full path of the node.
+      }
+
+
+      // Base case.
+      if (this.to.getId() == next.getId()) {
+
+        //this.done = true;
+        return next;
+
+      } else {
+        next = this.traverse(next);
+
+      }
 
     }
+
+    return next;
 
   }
 }

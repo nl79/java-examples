@@ -172,6 +172,10 @@ class Graph {
     return this;
   }
 
+  public int size() {
+    return this.nodes.size();
+  }
+
   public Graph addEdge(int f, int t, int weight) {
     Node from = this.getNodeAt(f);
     Node to = this.getNodeAt(t);
