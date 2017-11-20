@@ -65,6 +65,10 @@ class Node {
     return this.distance = value;
   }
 
+  public int getHops() { return this.hops; }
+
+  public int setHops(int value) { return this.hops = value; }
+
   public int getId() {
     return this.id;
   }

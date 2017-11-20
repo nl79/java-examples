@@ -38,6 +38,8 @@ class Dijkstra {
   private Node traverse() {
 
     this.from.setDistance(0);
+    this.from.setHops(0);
+
     return this.traverse(this.from);
   }
   private Node traverse(Node n) {
@@ -48,15 +50,21 @@ class Dijkstra {
 
     Node next = null;
 
+    int distance = 0;
+    int hops = 0;
+
     while((edge = n.getClosestUnvisitedEdge()) != null && this.done != true) {
 
       next = edge.to();
 
-      int distance = 0;
+
 
 
       // Get the new total distance.
       distance = n.getDistance() + edge.distance();
+
+      // Get the hop count to previous node and add one.
+      hops = (n.getHops() + 1);
 
       System.out.println("Current Node: " + n.getId() +
               " Next Node: " + next.getId() +
@@ -70,6 +78,10 @@ class Dijkstra {
         this.visited.set(next.getId(), distance);
 
         // Set the full path of the node.
+      }
+
+      if( hops < next.getHops()) {
+        next.setHops(hops);
       }
 
 

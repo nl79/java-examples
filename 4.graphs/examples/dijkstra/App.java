@@ -89,7 +89,9 @@ public class App {
     d = new Dijkstra(graph);
     Node n = d.from(graph.getNodeAt(0)).to(graph.getNodeAt(5)).execute();
 
-    System.out.println("\nFound Node: " + n.getId() + " | Cost: " + n.getDistance());
+    System.out.println("\nFound Node: " + n.getId() +
+            " | Distance: " + n.getDistance() +
+            " | Path: " + n.getHops());
 
   }
 }
