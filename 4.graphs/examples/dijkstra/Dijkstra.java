@@ -41,8 +41,15 @@ class Dijkstra {
     int distance = 0;
 
 
+
+
     // Get the new total distance.
     distance = n.getDistance() + edge.distance();
+
+    System.out.println("Next Node: " + next.getId());
+    System.out.println("Distance: " + distance);
+
+
 
     // Check if the current distance to the node is smaller than the new one.
     if(distance < next.getDistance()) {
@@ -61,13 +68,9 @@ class Dijkstra {
 
       return next;
       
-    } else if(next.visited()) {
-      System.out.println("visited");
-      return next;
+    } else {
 
-    } {
-
-      System.out.println("here");
+      System.out.println("hereeee");
       return this.traverse(next);
 
     }
