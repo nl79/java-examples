@@ -4,12 +4,20 @@ class Dijkstra {
   private Graph graph;
   private Node from;
   private Node to;
+  boolean done = false;
 
-  private ArrayList<Integer> visited = new ArrayList();
+  private ArrayList<Integer> visited;
 
   public Dijkstra(Graph g) {
     this.graph = g;
 
+    // Array of visited nodes and their total costs.
+    this.visited = new ArrayList();
+
+    // Initialize the visisted array
+    for(int i = 0; i <= this.graph.size(); ++i) {
+      this.visited.add(i, Integer.MAX_VALUE);
+    }
 
   }
 
@@ -30,50 +38,64 @@ class Dijkstra {
   private Node traverse() {
 
     this.from.setDistance(0);
+    this.from.setHops(0);
+
     return this.traverse(this.from);
   }
   private Node traverse(Node n) {
-
-    System.out.println("Visiting: " + n.getId());
-
-    Edge edge = n.getClosestUnvisitedEdge();
-    Node next = edge.to();
-    int distance = 0;
-
-
-
-
-    // Get the new total distance.
-    distance = n.getDistance() + edge.distance();
-
-    System.out.println("Next Node: " + next.getId());
-    System.out.println("Distance: " + distance);
-
-
-
-    // Check if the current distance to the node is smaller than the new one.
-    if(distance < next.getDistance()) {
-
-      next.setDistance(distance);
-
-      // Set the full path of the node.
-    }
-
     // Set the node as visited.
     n.visit();
 
-    // Base case.
-    if(this.to.getId() == next.getId()) {
+    Edge edge = null;
+
+    Node next = null;
+
+    int distance = 0;
+    int hops = 0;
+
+    while((edge = n.getClosestUnvisitedEdge()) != null && this.done != true) {
+
+      next = edge.to();
+
+      // Get the new total distance.
+      distance = n.getDistance() + edge.distance();
+
+      // Get the hop count to previous node and add one.
+      hops = (n.getHops() + 1);
+
+      System.out.println("Current Node: " + n.getId() +
+              " Next Node: " + next.getId() +
+              " | Distance: " + distance);
+
+      // Check if the current distance to the node is smaller than the new one.
+      if (distance < next.getDistance()) {
+
+        next.setDistance(distance);
+
+        this.visited.set(next.getId(), distance);
+
+        // Set the full path of the node.
+      }
+
+      if( hops < next.getHops()) {
+        next.setHops(hops);
+      }
 
 
-      return next;
-      
-    } else {
+      // Base case.
+      if (this.to.getId() == next.getId()) {
 
-      System.out.println("hereeee");
-      return this.traverse(next);
+        //this.done = true;
+        return next;
+
+      } else {
+        next = this.traverse(next);
+
+      }
 
     }
+
+    return next;
 
   }
 }
