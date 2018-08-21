@@ -73,5 +73,41 @@ public class Hello {
       System.out.println("wasCAr is true");
 
 
+    boolean gameOver = true;
+    int score = 800;
+    int levelCompleted = 5;
+    int bonus = 100;
+
+    int hightScore = calculateScore(gameOver, score, levelCompleted, bonus);
+    System.out.println("Your final score was " + hightScore);
+
+
+  }
+
+  public static void displayHightScorePosition(String playerName, int hightScorePosition) {
+    System.out.println(playerName + " manage to get into position "
+    + hightScorePosition + " on the high score table");
+  }
+
+  public static int calculateHightScorePosition(int playerScore){
+    if (playerScore > 1000) {
+      return 1;
+    } else if (playerScore > 500 && playerScore < 1000) {
+      return 2;
+    } else if(playerScore > 100 && playerScore < 500) {
+      return 3;
+    } else {
+      return 4;
+    }
+  }
+
+  public static int calculateScore(boolean gameOver, int score, int levelCompleted, int bonus) {
+    if(gameOver) {
+      int finalScore = score + (levelCompleted * bonus);
+      finalScore += 1000;
+
+      return finalScore;
+    }
+    return -1;
   }
 }
