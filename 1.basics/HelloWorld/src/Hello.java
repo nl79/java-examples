@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Hello {
   public static void main(String[] args) {
     System.out.println("Hello World!");
@@ -84,6 +86,9 @@ public class Hello {
 
     switching();
     forLooping();
+    DoWhileLooping();
+    TypeConversion();
+    userInput();
   }
 
   public static void displayHightScorePosition(String playerName, int hightScorePosition) {
@@ -151,5 +156,38 @@ public class Hello {
       System.out.println("# " + i);
     }
 
+  }
+
+  public static void DoWhileLooping() {
+    int count = 1;
+    do {
+      System.out.println("Count value was " + count);
+      count++;
+    } while(count != 6);
+  }
+
+  public static void TypeConversion() {
+    String numberAsString = "2018";
+    int number = Integer.parseInt(numberAsString);
+    double doubleNumber = Double.parseDouble(numberAsString);
+
+    System.out.println((numberAsString += 1));
+    System.out.println((number += 1));
+    System.out.println((doubleNumber += 1));
+  }
+
+  public static void userInput() {
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Enter your year of birth:");
+    int yearOfBirth = scanner.nextInt();
+    scanner.nextLine(); //handle next line charater(enter key)
+
+    System.out.println("Enter your name: ");
+    String name = scanner.nextLine();
+    int age = 2018 - yearOfBirth;
+
+    System.out.println("Your name is: " + name + ", and you are " + age + " years old.");
+    scanner.close();
   }
 }
