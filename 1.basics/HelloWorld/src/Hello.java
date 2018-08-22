@@ -82,6 +82,8 @@ public class Hello {
     System.out.println("Your final score was " + hightScore);
 
 
+    switching();
+    forLooping();
   }
 
   public static void displayHightScorePosition(String playerName, int hightScorePosition) {
@@ -109,5 +111,45 @@ public class Hello {
       return finalScore;
     }
     return -1;
+  }
+
+  public static void switching() {
+    int switchValue = 3;
+
+    switch(switchValue) {
+      case 1:
+        System.out.println("Value 1");
+        break;
+      case 2:
+        System.out.println("value 2");
+        break;
+      case 3:
+        System.out.println("value 3");
+        break;
+      default:
+        System.out.println("was default");
+        break;
+    }
+
+    // Java 7 only (String switch)
+    String month = "january";
+    switch(month.toLowerCase()) {
+      case "january":
+        System.out.println("Jan");
+        break;
+      case "february":
+        System.out.println("Feb");
+        break;
+      default:
+        System.out.println("Default");
+        break;
+    }
+  }
+
+  public static void forLooping() {
+    for(int i = 0; i < 5; ++i) {
+      System.out.println("# " + i);
+    }
+
   }
 }
