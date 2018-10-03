@@ -3,14 +3,20 @@ import java.util.ArrayList;
 public class Main {
   public static void main(String[]args){
     SimpleCracker sc = new SimpleCracker("./common-passwords.txt", "./shadow-simple");
+    Cracker cracker = new Cracker("./common-passwords.txt", "./shadow");
 
-    ArrayList<String> matches = new ArrayList<String>();
+    ArrayList<String> sc_matches = new ArrayList<String>();
+    ArrayList<String> cracker_matches = new ArrayList<String>();
 
-    matches = sc.crack();
+    //sc_matches = sc.crack();
+    cracker_matches = cracker.crack();
 
-    for(int i=0;i<matches.size();i++){
-      System.out.println(matches.get(i));
+    //print(sc_matches);
+  }
+
+  public static void print(ArrayList<String> list) {
+    for(int i=0;i<list.size();i++){
+      System.out.println(list.get(i));
     }
-
   }
 }
