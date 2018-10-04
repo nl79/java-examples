@@ -77,7 +77,7 @@ public class Cracker {
 
       while(sc.hasNextLine()) {
         entry = sc.nextLine();
-
+        
         // Split the entry and extract the salt and password.
         String[] parts = entry.split(":");
 
@@ -88,7 +88,7 @@ public class Cracker {
         // Loop over every password token,  
         for(int i=0; i < tokens.size(); ++i) {
           token = tokens.get(i);
-
+          System.out.println(token);
           // hash it with the salt, and compare it.
           hash = MD5Shadow.crypt(token, pwHashParts[1]);
           // System.out.println(hash);
