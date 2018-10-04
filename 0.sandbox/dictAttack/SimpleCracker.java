@@ -5,11 +5,35 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.security.MessageDigest;
 
+/*
+user0:alphabet
+user1:aaa
+user2:homework
+user3:polynomial
+user4:lamination
+user5:rachmaninoff
+user6:tangerine
+user7:football
+user8:gnu
+user9:zmodem
+*/
 public class SimpleCracker {
 
   private String dictFilepath;
   private String pwFilepath;
   private ArrayList<String> tokens;
+
+  public static void main(String[]args) {
+
+    SimpleCracker sc = new SimpleCracker("./common-passwords.txt", "./shadow-simple");
+    ArrayList<String> matches = new ArrayList<String>();
+
+    matches = sc.crack();
+
+    for(int i=0;i<matches.size();i++){
+      System.out.println(matches.get(i));
+    }
+  }
 
   public SimpleCracker(String dictFilepath, String pwFilepath) {
     this.dictFilepath = dictFilepath;

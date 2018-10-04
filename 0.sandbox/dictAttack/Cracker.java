@@ -5,11 +5,40 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.security.MessageDigest;
 
+// https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt
+
+/*
+user0:kimberly
+user1:stuttgart
+user8:superstage
+user9:mozart
+*/
+
+/*
+user0:kimberly
+user1:stuttgart
+user5:honeydew
+user8:superstage
+user9:mozart
+*/
 public class Cracker {
 
   private String dictFilepath;
   private String pwFilepath;
   private ArrayList<String> tokens;
+
+
+  public static void main(String[]args) {
+
+    Cracker cracker = new Cracker("./common-passwords.txt", "./shadow");
+    ArrayList<String> matches = new ArrayList<String>();
+
+    matches = cracker.crack();
+
+    for(int i=0;i<matches.size();i++){
+      System.out.println(matches.get(i));
+    }
+  }
 
   public Cracker(String dictFilepath, String pwFilepath) {
     this.dictFilepath = dictFilepath;
@@ -88,9 +117,15 @@ public class Cracker {
         // Loop over every password token,  
         for(int i=0; i < tokens.size(); ++i) {
           token = tokens.get(i);
-          System.out.println(token);
+          //System.out.println(token);
           // hash it with the salt, and compare it.
-          hash = MD5Shadow.crypt(token, pwHashParts[1]);
+          try {
+            hash = MD5Shadow.crypt(token, pwHashParts[1]);
+          } catch(Exception e) {
+            //System.out.println("Failed to Hash! Salt: " + pwHashParts[1] + "| Token: " + token);
+            continue;
+          }
+          
           // System.out.println(hash);
           // System.out.println(hashParts[2]);
           // System.out.println("-----------------------");

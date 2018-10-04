@@ -15,7 +15,7 @@ public class Main {
     // System.out.println("------------------");
     // print(cracker_matches);
 
-    Cracker crackerBig = new Cracker("./rockyou.txt", "./shadow");
+    Cracker crackerBig = new Cracker("./10-million-password-list-top-1000000.txt", "./shadow");
     ArrayList<String> cracker_matches_big = new ArrayList<String>();
 
     cracker_matches_big = crackerBig.crack();
