@@ -8,10 +8,12 @@ public class Main {
     ArrayList<String> sc_matches = new ArrayList<String>();
     ArrayList<String> cracker_matches = new ArrayList<String>();
 
-    //sc_matches = sc.crack();
+    sc_matches = sc.crack();
     cracker_matches = cracker.crack();
 
-    //print(sc_matches);
+    print(sc_matches);
+    System.out.println("------------------");
+    print(cracker_matches);
   }
 
   public static void print(ArrayList<String> list) {

@@ -80,24 +80,22 @@ public class Cracker {
 
         // Split the entry and extract the salt and password.
         String[] parts = entry.split(":");
-        String[] hashParts = parts[1].replace("^\\$", "").split("\\$");
 
-        for(int i = 0; i < hashParts.length; ++i) {
-          System.out.println(hashParts[i]);
-        }
-
+        // Strip the first $ character from the password field
+        // Split the password field into chunks on the $ character
+        String[] pwHashParts = parts[1].replaceAll("^[$]", "").split("\\$");
+        
         // Loop over every password token,  
         for(int i=0; i < tokens.size(); ++i) {
           token = tokens.get(i);
 
           // hash it with the salt, and compare it.
-          hash = MD5Shadow.crypt(token, hashParts[1]);
+          hash = MD5Shadow.crypt(token, pwHashParts[1]);
           // System.out.println(hash);
           // System.out.println(hashParts[2]);
           // System.out.println("-----------------------");
-          if(hashParts[2].equals(hash)) {
+          if(pwHashParts[2].equals(hash)) {
             matches.add(parts[0] + ":" + token);
-            System.out.println(parts[0] + ":" + token);
           }
         }
       }
