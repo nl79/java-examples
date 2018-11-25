@@ -3,7 +3,10 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
 
-public class Demo {
+/**
+ * Created by dev on 16/09/15.
+ */
+public class LinkedListExample {
     public static void main(String[] args) {
         LinkedList<String> placesToVisit = new LinkedList<String>();
         addInOrder(placesToVisit, "Sydney");
