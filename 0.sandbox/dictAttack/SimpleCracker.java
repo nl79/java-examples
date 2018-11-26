@@ -1,3 +1,10 @@
+/*
+Nazar Lesiv
+nl79
+CS 645
+Project 1
+*/
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
