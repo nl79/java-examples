@@ -1,0 +1,5 @@
+com/nazar/product/bo/ProductBO.class
+com/nazar/product/dto/Product.class
+com/nazar/product/bo/ProductBOImpl.class
+com/nazar/product/dao/ProductDAO.class
+com/nazar/product/dao/ProductDAOImpl.class

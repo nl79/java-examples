@@ -2,12 +2,22 @@
   "configurations": [
     {
       "type": "java",
-      "name": "CodeLens (Launch) - Cracker",
+      "name": "CodeLens (Launch) - Arrays",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
       "stopOnEntry": false,
-      "mainClass": "Cracker",
+      "mainClass": "Arrays",
+      "args": ""
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Main",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "Main",
       "args": ""
     }
   ]
