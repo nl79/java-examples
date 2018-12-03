@@ -302,3 +302,6 @@
 2018-12-03 12:17:26.913  INFO 1717 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
 2018-12-03 12:17:28.026  INFO 1717 --- [main] c.n.springweb.ProductrestapiApplication  : Started ProductrestapiApplication in 3.351 seconds (JVM running for 3.738)
 2018-12-03 12:17:31.750  INFO 1717 --- [RMI TCP Connection(3)-127.0.0.1] io.undertow.servlet                      : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2018-12-03 12:25:14.290  INFO 1717 --- [RMI TCP Connection(19)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2018-12-03 12:25:14.295  INFO 1717 --- [RMI TCP Connection(19)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2018-12-03 12:25:14.296  INFO 1717 --- [RMI TCP Connection(19)-127.0.0.1] io.undertow.servlet                      : Destroying Spring FrameworkServlet 'dispatcherServlet'
