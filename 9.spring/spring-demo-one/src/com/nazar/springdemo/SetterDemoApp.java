@@ -11,6 +11,11 @@ public class SetterDemoApp {
 		CricketCoach theCoach = context.getBean("myCricketCoach", CricketCoach.class);
 		// call methods on the bean
 		System.out.println(theCoach.getDailyFortune());
+		
+		// call our new methods to get litral values
+		System.out.println(theCoach.getEmailAddress());
+		System.out.println(theCoach.getTeam());
+
 		// close the context
 		context.close();
 	}
