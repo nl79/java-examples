@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("hello");
         Theatre theatre = new Theatre("Olympian", 8 , 12);
+        SetAndHashSet setAndHashSetExample = new SetAndHashSet();
 
         theatre.getSeats();
 
@@ -27,6 +28,10 @@ public class Main {
         priceSeats.add(theatre.new Seat("A00", 13.00));
         Collections.sort(priceSeats, Theatre.PRICE_ORDER);
         printList(priceSeats);
+
+
+        // Call the Set and Hash Set example class to launch the examples
+        setAndHashSetExample.run();
 
 
     }
